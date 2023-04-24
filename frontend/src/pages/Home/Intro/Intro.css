@@ -1,0 +1,17 @@
+.Intro-img {
+    height: 75vh;
+    background-image: url('../../../assets/background-image-for-restaurant-website.jpg');
+    background-repeat: no-repeat;
+    background-position: top;
+    background-size: cover;
+    position: relative;
+}
+
+.Intro-content {
+    position: relative;
+    top: 35%;
+}
+
+.Intro-content p {
+    font-size: 30px;
+}

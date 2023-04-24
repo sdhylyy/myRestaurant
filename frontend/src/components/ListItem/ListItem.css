@@ -1,0 +1,57 @@
+.list-items {
+    margin: auto;
+    max-width: 800px;
+}
+
+.list-items ul {
+    width: 100%;
+}
+
+.list-items ul li {
+    display: flex;
+    padding: 10px 5px;
+    border-bottom: 1px dashed #ebe8e2;
+}
+
+.list-items ul li h3 {
+    margin-left: auto;
+    font-size: 24px;
+}
+
+.buttons button {
+    background-color: white;
+    color: black;
+    padding-top: 28px;
+}
+
+h3 {
+    color: var(--color-secondary);
+    font-weight: 500;
+    text-transform: uppercase;
+    padding-top: 25px;
+}
+
+.menu-button {
+    white-space: nowrap;
+}
+
+.menu-image {
+    height: 100px;
+    width: 100px !important;
+    width: 120px;
+    height: 100px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+.menu-delete{
+    margin-left: 10px;
+    margin-top: 15px;
+}
+
+.menu-icon{
+    margin-left: 10px;
+    margin-top: 25px;
+    width: 32px;
+    height:32px;
+    cursor: pointer;
+}
