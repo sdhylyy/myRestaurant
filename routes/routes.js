@@ -187,7 +187,7 @@ router.post('/api/addToMenu',async (req, res) => {
     filename:newFileName
   }
   try {
-    await dbFunctions.addImage(fileObj);
+    dbFunctions.addImage(fileObj);
     res.json(await dbFunctions.addToMenu(obj));
   } catch (err) {
     console.error(err);
@@ -218,7 +218,7 @@ router.post('/api/deleteFromMenu',async (req, res) => {
     return;
   }
   try {
-    await dbFunctions.deleteImage(data.filename);
+    dbFunctions.deleteImage(data.filename);
     res.json(await dbFunctions.deleteFromMenu(data.id));
   } catch (err) {
     console.error(err);
