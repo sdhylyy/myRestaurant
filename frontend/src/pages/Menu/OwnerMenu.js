@@ -7,6 +7,7 @@ const OwnerMenu = (props) => {
     const modal = useRef(null);
     const editModal = useRef(null);
     const editId = useRef({});
+    const maxSize = useRef(5*1024*1024);
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectedEditFile, setSelectedEditFile] = useState(null);
     const addOrderURL = "/api/addToMenu";
@@ -73,6 +74,10 @@ const OwnerMenu = (props) => {
             alert("image mustn't be empty.");
             return false;
         }
+        if (selectedFile.size > maxSize.current) {
+            alert("File must not exceed 5 MB!");
+            return false;
+        } 
         let data = new FormData();
         data.append("file", selectedFile, selectedFile.name);
         data.append("title", title);
@@ -167,6 +172,10 @@ const OwnerMenu = (props) => {
             data.append("description", description);;
         }
         if (selectedEditFile) {
+            if (selectedEditFile.size > maxSize.current) {
+                alert("File must not exceed 5 MB!");
+                return false;
+            } 
             data.append("file", selectedEditFile, selectedEditFile.name);
         }
         data.append("id", editId.id);

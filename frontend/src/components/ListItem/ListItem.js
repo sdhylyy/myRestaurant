@@ -20,9 +20,15 @@ const ListItem = ({
             method: 'POST',
             body: data
         })
-            .then(response => response.blob())
-            .then(data => setImageData(URL.createObjectURL(data)))
-            .catch(error => console.error(error));
+        .then(res => {
+            if (!res.ok) {
+                throw new Error();
+            } else {
+                return res.json()
+            }
+        })
+        .then(data => setImageData(data.data))
+        .catch(error => console.error(error));
     }
 
     useEffect(() => {
@@ -53,11 +59,11 @@ const ListItem = ({
         <div className="list-items">
             <ul>
                 <li>
-                    {filename && (
+                    {imageData && (
                         <img
                             className="menu-image"
-                            src={imageData}
-                            alt="Image"
+                            src={`data:image/png;base64,${imageData}`}
+                            alt="hero"
                         />
                     )}
 

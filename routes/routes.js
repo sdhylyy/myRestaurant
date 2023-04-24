@@ -157,7 +157,7 @@ router.post('/api/submitOrder', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send(err);
-  }
+  }ncode
 })
 
 router.post('/api/addToMenu',async (req, res) => {
@@ -176,12 +176,10 @@ router.post('/api/addToMenu',async (req, res) => {
     type=file.name.substring(startIndex, file.name.length).toLowerCase();
   }
   const newFileName=crypto.randomUUID()+type;
-  const path=uploadDir+newFileName;
-  file.mv(path, (err) => {
-    if (err) {
-      return res.status(500).send(err);
-    }
-  });
+  let fileObj={
+    filename:newFileName,
+    data:file.data.toString('base64')
+  }
   let obj={
     title:data.title,
     price:data.price,
@@ -189,6 +187,7 @@ router.post('/api/addToMenu',async (req, res) => {
     filename:newFileName
   }
   try {
+    await dbFunctions.addImage(fileObj);
     res.json(await dbFunctions.addToMenu(obj));
   } catch (err) {
     console.error(err);
@@ -219,17 +218,8 @@ router.post('/api/deleteFromMenu',async (req, res) => {
     return;
   }
   try {
-    let path=uploadDir+data.filename;
-    let result=await dbFunctions.deleteFromMenu(data.id)
-    if (fs.existsSync(path)) {
-      fs.unlink(path,(err => {
-        if (err){console.log(err)} 
-        else {
-          console.log("\nDeleted file: "+path);
-        }
-      }));
-    }
-    res.json(result);
+    await dbFunctions.deleteImage(data.filename);
+    res.json(await dbFunctions.deleteFromMenu(data.id));
   } catch (err) {
     console.error(err);
     res.status(500).send(err);
@@ -253,22 +243,12 @@ router.post('/api/editMenu',async (req, res) => {
       }
       const newFileName=crypto.randomUUID()+type;
       obj.filename=newFileName;
-      const path=uploadDir+newFileName;
-      file.mv(path, (err) => {
-        if (err) {
-          return res.status(500).send(err);
-        }
-      });
-      let oldPath=uploadDir+data.preFilename;
-      if (fs.existsSync(oldPath)) {
-        fs.unlink(oldPath,(err => {
-          if (err){console.log(err)} 
-          else {
-            console.log("\nDeleted file: "+oldPath);
-          }
-        }));
+      let fileObj={
+        filename:newFileName,
+        data:file.data.toString('base64')
       }
-
+      dbFunctions.addImage(fileObj);
+      dbFunctions.deleteImage(data.preFilename);
     }
     if(data.title&&data.title!=""){
       obj.title=data.title;
@@ -279,7 +259,6 @@ router.post('/api/editMenu',async (req, res) => {
     if(data.description&&data.description!=""){
       obj.description=data.description;
     }
-    console.log(obj);
 
     return res.json(await dbFunctions.updateMenuItemById(data.id,obj));
 
@@ -290,21 +269,14 @@ router.post('/api/editMenu',async (req, res) => {
   }
 })
 
-router.post('/api/getImage', (req, res) => {
+router.post('/api/getImage', async (req, res) => {
   let data=req.body;
-  // read the image file from disk
-  const filePath = uploadDir+data.filename;
-  fs.readFile(filePath, (err, data) => {
-    if (err) {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
-    } else {
-      // set the response content-type header to image/jpeg
-      res.set('Content-Type', 'image/jpeg');
-      // send the binary data of the image as the response
-      res.send(data);
-    }
-  });
+  try {
+    return res.json(await dbFunctions.getImage(data.filename));
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err);
+  }
 });
 
 router.get('*', async function(req, res) {

@@ -5,6 +5,7 @@ const collUser = 'users';
 const collOwner = 'owners';
 const collOrders='orders';
 const collMenu='menu';
+const collImages='images';
 const url = process.env.MOGO_URL || "mongodb://127.0.0.1:27017";
 const client = new MongoClient(url);
 
@@ -48,6 +49,15 @@ module.exports = {
   },
   updateMenuItemById:async(id,obj)=>{
     return await db.collection(collMenu).updateOne({_id:ObjectId(id)},{$set:obj});
+  },
+  getImage:async(name)=>{
+    return await db.collection(collImages).findOne({filename:name});
+  },
+  addImage:async(obj)=>{
+    return await db.collection(collImages).insertOne(obj);
+  },
+  deleteImage:async(name)=>{
+    return await db.collection(collImages).deleteOne({filename:name});
   },
 };
 
