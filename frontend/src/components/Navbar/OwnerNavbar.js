@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-
 import { Link, NavLink } from "react-router-dom";
-
+import { FaBars, FaTimes } from "react-icons/fa";
 import logo from "../../assets/restaurant-logo.png";
 
 import "./Navbar.css";
@@ -59,6 +58,13 @@ const OwnerNavbar = (props) => {
                         </li>
 
                     </ul>
+                    <div className="hamburger" onClick={handleClick}>
+                        {click ? (
+                            <FaTimes size={20} style={{ color: "#fff" }} />
+                        ) : (
+                            <FaBars size={20} style={{ color: "#fff" }} />
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
