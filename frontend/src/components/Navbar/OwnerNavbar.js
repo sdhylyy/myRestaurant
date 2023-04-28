@@ -51,6 +51,11 @@ const OwnerNavbar = (props) => {
                                 Orders
                             </NavLink>
                         </li>
+                        <li onClick={handleClick} >
+                            <NavLink className="nav-link" to="/owner/users">
+                                Users
+                            </NavLink>
+                        </li>
                         <li onClick={logout}>
                             <button className="nav-link transpanrent">
                                 logout

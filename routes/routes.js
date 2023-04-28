@@ -11,6 +11,7 @@ const loginRedirect="/login?msg=login needed";
 const path = require('path');
 const uploadDir="./upload/";
 const fs=require('fs');
+const initBalance=1000;
 
 router.get('/api/findOrderByName', async (req, res) => {
   if (!req.session.login) {
@@ -82,6 +83,7 @@ router.post('/api/register', async (req, res) => {
       res.redirect("/register?msg=user already exist");
     } else {
       data.password=genPassword(data.password);
+      data.balance=initBalance;
       await dbFunctions.addUser(data);
       res.redirect("/login?msg=register succeed");
     }
@@ -103,6 +105,9 @@ router.post('/api/submitOrder', async (req, res) => {
     delivered:req.body.delivered
   };
   try {
+    let preBalance= await dbFunctions.getBalanceByName(data.username);
+    let currBalance = parseFloat(preBalance)-parseFloat(data.total);
+    await dbFunctions.updateBalanceByName(data.username,currBalance);
     data = await dbFunctions.addOrder(data);
     res.json(data);
   } catch (err) {
@@ -139,26 +144,6 @@ router.post('/api/setOrderReady',async (req, res) => {
     res.status(500).send(err);
   }
 });
-
-router.post('/api/submitOrder', async (req, res) => {
-  if (!req.session.login) {
-    res.redirect(loginRedirect);
-    return;
-  }
-  let data={
-    username:req.session.user.username,
-    time:req.body.time,data:req.body.data,
-    total:req.body.total,
-    delivered:req.body.delivered
-  };
-  try {
-    data = await dbFunctions.addOrder(data);
-    res.json(data);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send(err);
-  }ncode
-})
 
 router.post('/api/addToMenu',async (req, res) => {
   let data = req.body;
@@ -278,6 +263,45 @@ router.post('/api/getImage', async (req, res) => {
     res.status(500).send(err);
   }
 });
+
+router.get('/api/getBalanceByName', async (req, res) => { 
+if (!req.session.login) {
+  res.redirect(loginRedirect);
+  return;
+}
+try {
+  let data=await dbFunctions.getBalanceByName(req.session.user.username);
+  return res.json(data);
+} catch (err) {
+  console.error(err);
+  res.status(500).send(err);
+}
+});
+
+router.post('/api/getUsers',async (req, res) => {
+  if (!req.session.ownerLogin) {
+    res.redirect(loginRedirect);
+    return;
+  }
+  try {
+    return res.json(await dbFunctions.getAllUsers(req.body));
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err);
+  }
+})
+router.post('/api/editBalance',async (req, res) => {
+  if (!req.session.ownerLogin) {
+    res.redirect(loginRedirect);
+    return;
+  }
+  try {
+    return res.json(await dbFunctions.updateBalanceByName(req.body.username,req.body.balance));
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err);
+  }
+})
 
 router.get('*', async function(req, res) {
   res.sendFile('index.html', {root: path.join(__dirname, '../frontend/build')});

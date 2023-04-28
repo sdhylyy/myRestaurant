@@ -7,11 +7,13 @@ import './Account.css'
 
 const Account = (props) => {
   const findOrderByNameURL = '/api/findOrderByName';
+  const getBalanceURL='/api/getBalanceByName';
   const [orderData, setOrderData] = useState([]);
   const [currData,setCurrData]=useState([]);
   const [totalNumber, setTotalNumber] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(0);
+  const [balance,setBalance]=useState();
 
   const onPageChange = (currPage) => {
     setCurrentPage(currPage);
@@ -23,6 +25,25 @@ const Account = (props) => {
 }
 
   const loadData = () => {
+    fetch(getBalanceURL).then(
+      (res) => {
+        if (res.redirected) {
+          props.logout();
+        } else if (!res.ok) {
+          throw new Error();
+        } else {
+          return res.json()
+        }
+      }
+    ).then(
+      (data) => {
+        if(data){
+          setBalance(data);
+        }
+      }
+    ).catch((error) => {
+      console.error(error);
+    })
     fetch(findOrderByNameURL).then(
       (res) => {
         if (res.redirected) {
@@ -74,6 +95,7 @@ const Account = (props) => {
     <div className="header-padding">
       <img src={Logout} alt="logout" title="logout" className="operation-icon" onClick={logoutFunc} />
       <h1 className="order-title">My Orders</h1>
+      {balance && <h2 className="order-title">balance:{parseFloat(balance).toFixed(2)}$</h2>}
       <div>
         {currData.map((data, i) => (
           <OrderItemList

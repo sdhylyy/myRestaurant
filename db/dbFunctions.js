@@ -59,5 +59,15 @@ module.exports = {
   deleteImage:async(name)=>{
     return await db.collection(collImages).deleteOne({filename:name});
   },
+  getBalanceByName:async(name)=>{
+    let user=await db.collection(collUser).findOne({username:name})
+    return user.balance;
+  },
+  updateBalanceByName:async(name,current)=>{
+    return await db.collection(collUser).updateOne({username:name},{$set:{balance:current}});
+  },
+  getAllUsers:async(obj)=>{
+    return await db.collection(collUser).find(obj).toArray();
+  },
 };
 

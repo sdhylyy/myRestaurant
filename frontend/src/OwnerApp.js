@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {Routes, Route} from 'react-router-dom'
 import OwnerMenu from './pages/Menu/OwnerMenu'
 import OwnerAccount from './pages/Account/OwnerAccount'
+import UsersPage from './pages/Users/UsersPage'
 import UseCheckMsg from "./hooks/UseCheckMsg";
 import { useNavigate } from "react-router-dom";
 
@@ -50,6 +51,7 @@ function App() {
       <Routes>
         <Route path="/menu" element={<OwnerMenu />} />
         <Route path="/" element={<OwnerAccount />} />
+        <Route path="/users" element={<UsersPage />} />
       </Routes>
       <Footer />
     </div>

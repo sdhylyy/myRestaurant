@@ -29,6 +29,8 @@ const router = createBrowserRouter([
     element:<OwnerApp></OwnerApp>,
     children:[{
       path:"/owner/menu"
+    },{
+      path:"/owner/users"
     }]
   }
 ]);

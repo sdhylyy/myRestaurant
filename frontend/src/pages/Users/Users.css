@@ -1,0 +1,14 @@
+.table-operation-icon{
+    cursor: pointer;
+    height: 24px;
+    margin-right: 10px;
+    margin-top: 10px;
+    width: 24px;
+}
+.table-container{
+    margin-left: 20px;
+    margin-right: 20px;
+}
+.user-searchform-container{
+    padding-top:20px;
+}
