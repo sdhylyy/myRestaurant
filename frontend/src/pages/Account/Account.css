@@ -14,7 +14,6 @@
 
 .aot-form {
     justify-content: center;
-    padding-bottom: 20px;
 }
 
 .aot-form select,
@@ -32,6 +31,7 @@
 
 .form-group {
     margin-bottom: 1rem;
+    padding-bottom: 20px;
 }
 
 .form-inline {

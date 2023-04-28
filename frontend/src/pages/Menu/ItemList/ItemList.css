@@ -73,4 +73,6 @@
 
 .myModal{
     z-index: 99999 !important;
+    min-width: 500px;
+    padding-right: 0 !important;
 }
